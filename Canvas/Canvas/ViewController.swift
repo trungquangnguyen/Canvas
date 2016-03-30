@@ -61,12 +61,16 @@ class ViewController: UIViewController {
             newlyCreatedFace.center.y += trayView.frame.origin.y
             
             newlyCreatedFace.userInteractionEnabled = true
-            let panOnNewImageView = UIPanGestureRecognizer(target: self, action: #selector(ViewController.newCreatedImageViewDidPan(_:)))
+            let panOnNewImageView = UIPanGestureRecognizer(target: self, action: "newCreatedImageViewDidPan:")
             newlyCreatedFace.addGestureRecognizer(panOnNewImageView)
             
             let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(ViewController.newCreatedImageViewDidRotate(_:)))
             newlyCreatedFace.addGestureRecognizer(rotationGesture)
             
+            let pinchGesture = UIPinchGestureRecognizer(target: self, action: "scaleImage:")
+            newlyCreatedFace.addGestureRecognizer(pinchGesture)
+            pinchGesture.delegate = self
+
         }else if sender.state == .Changed {
             newlyCreatedFace.center = sender.locationInView(self.view)
         }
@@ -83,11 +87,23 @@ class ViewController: UIViewController {
             sender.transform = CGAffineTransformMakeScale(1, 1)
         }
     }
+
     
     func newCreatedImageViewDidRotate(rotateGesture: UIRotationGestureRecognizer) {
         print("Rotation: \(rotateGesture.rotation)")
         let sender = rotateGesture.view as! UIImageView
         sender.transform = CGAffineTransformMakeRotation(rotateGesture.rotation)
+    }
+
+    func scaleImage(pinch: UIPinchGestureRecognizer){
+        let sender = pinch.view as! UIImageView
+        sender.transform = CGAffineTransformMakeScale(pinch.scale,pinch.scale)
+    }
+}
+
+extension ViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 }
 
