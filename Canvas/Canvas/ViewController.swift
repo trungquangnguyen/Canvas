@@ -10,16 +10,42 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var trayView: UIView!
+    var trayOriginalCenter: CGPoint!
+    var trayCenterOpen: CGPoint!
+    var trayCenterClosed: CGPoint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        trayCenterOpen = trayView.center
+        trayCenterClosed = CGPointMake(trayView.center.x, self.view.frame.size.height)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    @IBAction func onTrayPanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
+        // Absolute (x,y) coordinates in parent view (parentView should be
+        // the parent view of the tray)
+        let point = panGestureRecognizer.locationInView(self.view)
+        
+        if panGestureRecognizer.state == UIGestureRecognizerState.Began {
+            print("Gesture began at: \(point)")
+            trayOriginalCenter = trayView.center
+        } else if panGestureRecognizer.state == UIGestureRecognizerState.Changed {
+            print("Gesture changed at: \(point)")
+            let translation = panGestureRecognizer.translationInView(self.view)
+            trayView.center = CGPoint(x: trayOriginalCenter.x, y: trayOriginalCenter.y + translation.y)
 
+        } else if panGestureRecognizer.state == UIGestureRecognizerState.Ended {
+            print("Gesture ended at: \(point)")
+            let velocity = panGestureRecognizer.velocityInView(self.view)
+            print("Velocity: \(velocity.y)")
+            if velocity.y < 0 {
+                trayView.center = trayCenterOpen
+            } else if velocity.y > 0 {
+                trayView.center = trayCenterClosed
+            }
+        }
+    }
 
 }
 
