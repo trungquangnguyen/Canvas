@@ -59,12 +59,26 @@ class ViewController: UIViewController {
             self.view.addSubview(newlyCreatedFace)
             newlyCreatedFace.center = image.center
             newlyCreatedFace.center.y += trayView.frame.origin.y
+            
+            newlyCreatedFace.userInteractionEnabled = true
+            let panOnNewImageView = UIPanGestureRecognizer(target: self, action: #selector(ViewController.newCreatedImageViewDidPan(_:)))
+            newlyCreatedFace.addGestureRecognizer(panOnNewImageView)
+            
         }else if sender.state == .Changed {
             newlyCreatedFace.center = sender.locationInView(self.view)
         }
         
     }
     
-
+    func newCreatedImageViewDidPan(panGesture: UIPanGestureRecognizer) {
+        let sender = panGesture.view as! UIImageView
+        if panGesture.state == .Began {
+            sender.transform = CGAffineTransformMakeScale(1.5, 1.5)
+        } else if panGesture.state == .Changed {
+            sender.center = panGesture.locationInView(self.view)
+        } else if panGesture.state == .Ended {
+            sender.transform = CGAffineTransformMakeScale(1, 1)
+        }
+    }
 }
 
