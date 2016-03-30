@@ -55,6 +55,16 @@ class ViewController: UIViewController {
     @IBAction func imageViewDidPan(sender: UIPanGestureRecognizer) {
         let image = sender.view as! UIImageView
         if sender.state == .Began{
+            
+//            UIView.animateWithDuration(0.2, delay: 0, options: [UIViewAnimationOptions.Repeat, .Autoreverse], animations: { () -> Void in
+//                image.center.x -= 5
+//                image.center.y -= 5
+//                }) { (bool: Bool) -> Void in
+//                    image.center.x += 5
+//                    image.center.y += 5
+//
+//            }
+            
             newlyCreatedFace = UIImageView(image: image.image)
             self.view.addSubview(newlyCreatedFace)
             newlyCreatedFace.center = image.center
@@ -73,7 +83,27 @@ class ViewController: UIViewController {
 
         }else if sender.state == .Changed {
             newlyCreatedFace.center = sender.locationInView(self.view)
+        }else if sender.state == .Ended {
+            //            image.layer.removeAllAnimations()
+            
+            let pointInTray = sender.locationInView(trayView)
+            print(pointInTray)
+            if CGRectContainsPoint(trayView.frame, newlyCreatedFace.center){
+                //                UIView.animateWithDuration(0.2, animations: { () -> Void in
+                //
+                //                    }, completion: {
+                //                      finish in
+                //
+                //                }
+                
+                UIView.animateWithDuration(0.3, animations: { () -> Void in
+                    self.newlyCreatedFace.center = image.center
+                    }, completion: { (a: Bool) -> Void in
+                        self.newlyCreatedFace.removeFromSuperview()
+                })
+            }
         }
+        
         
     }
     
