@@ -61,9 +61,12 @@ class ViewController: UIViewController {
             newlyCreatedFace.center.y += trayView.frame.origin.y
             
             newlyCreatedFace.userInteractionEnabled = true
-            let panOnNewImageView = UIPanGestureRecognizer(target: self, action: #selector(ViewController.newCreatedImageViewDidPan(_:)))
+            let panOnNewImageView = UIPanGestureRecognizer(target: self, action: "newCreatedImageViewDidPan:")
             newlyCreatedFace.addGestureRecognizer(panOnNewImageView)
             
+            let pinchGesture = UIPinchGestureRecognizer(target: self, action: "scaleImage:")
+            newlyCreatedFace .addGestureRecognizer(pinchGesture)
+            newlyCreatedFace.userInteractionEnabled = true
         }else if sender.state == .Changed {
             newlyCreatedFace.center = sender.locationInView(self.view)
         }
@@ -80,5 +83,9 @@ class ViewController: UIViewController {
             sender.transform = CGAffineTransformMakeScale(1, 1)
         }
     }
+    func scaleImage(pinch: UIPinchGestureRecognizer){
+        newlyCreatedFace.transform = CGAffineTransformMakeScale(pinch.scale,pinch.scale)
+          }
+
 }
 
