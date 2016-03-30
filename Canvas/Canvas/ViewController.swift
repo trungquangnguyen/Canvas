@@ -64,6 +64,9 @@ class ViewController: UIViewController {
             let panOnNewImageView = UIPanGestureRecognizer(target: self, action: #selector(ViewController.newCreatedImageViewDidPan(_:)))
             newlyCreatedFace.addGestureRecognizer(panOnNewImageView)
             
+            let rotationGesture = UIRotationGestureRecognizer(target: self, action: #selector(ViewController.newCreatedImageViewDidRotate(_:)))
+            newlyCreatedFace.addGestureRecognizer(rotationGesture)
+            
         }else if sender.state == .Changed {
             newlyCreatedFace.center = sender.locationInView(self.view)
         }
@@ -79,6 +82,12 @@ class ViewController: UIViewController {
         } else if panGesture.state == .Ended {
             sender.transform = CGAffineTransformMakeScale(1, 1)
         }
+    }
+    
+    func newCreatedImageViewDidRotate(rotateGesture: UIRotationGestureRecognizer) {
+        print("Rotation: \(rotateGesture.rotation)")
+        let sender = rotateGesture.view as! UIImageView
+        sender.transform = CGAffineTransformMakeRotation(rotateGesture.rotation)
     }
 }
 
