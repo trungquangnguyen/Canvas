@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     var trayOriginalCenter: CGPoint!
     var trayCenterOpen: CGPoint!
     var trayCenterClosed: CGPoint!
-    
+    var newlyCreatedFace: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +53,15 @@ class ViewController: UIViewController {
     }
     
     @IBAction func imageViewDidPan(sender: UIPanGestureRecognizer) {
+        let image = sender.view as! UIImageView
+        if sender.state == .Began{
+            newlyCreatedFace = UIImageView(image: image.image)
+            self.view.addSubview(newlyCreatedFace)
+            newlyCreatedFace.center = image.center
+            newlyCreatedFace.center.y += trayView.frame.origin.y
+        }else if sender.state == .Changed {
+            newlyCreatedFace.center = sender.locationInView(self.view)
+        }
         
     }
     
