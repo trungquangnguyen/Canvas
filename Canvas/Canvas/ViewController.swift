@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         trayCenterOpen = trayView.center
-        trayCenterClosed = CGPointMake(trayView.center.x, self.view.frame.size.height)
+        trayCenterClosed = CGPointMake(trayView.center.x, self.view.frame.size.height + 50)
     }
 
     @IBAction func onTrayPanGesture(panGestureRecognizer: UIPanGestureRecognizer) {
@@ -40,9 +40,13 @@ class ViewController: UIViewController {
             let velocity = panGestureRecognizer.velocityInView(self.view)
             print("Velocity: \(velocity.y)")
             if velocity.y < 0 {
-                trayView.center = trayCenterOpen
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    self.trayView.center = self.trayCenterOpen
+                });
             } else if velocity.y > 0 {
-                trayView.center = trayCenterClosed
+                UIView.animateWithDuration(0.5, animations: { () -> Void in
+                    self.trayView.center = self.trayCenterClosed
+                });
             }
         }
     }
